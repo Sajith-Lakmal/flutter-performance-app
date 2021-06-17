@@ -38,7 +38,7 @@ class _HomeState extends State<Home> {
       Align(
         alignment: Alignment.bottomCenter,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ElevatedButton(
               child: Text("Increase to ${numberOfCircles * 2}"),
