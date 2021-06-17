@@ -13,22 +13,53 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Performance App',
-      theme: ThemeData(
-        primarySwatch: Colors.brown,
-      ),
-      home: Scaffold(
-          body: Stack(children: [
-        ...List.generate(1000, (index) => Performance()),
-        Positioned(
-          bottom: 10,
-          right: 10,
-          left: 10,
-          child:
-              ElevatedButton(onPressed: () {}, child: Text("Increase by x10")),
+        title: 'Performance App',
+        theme: ThemeData(
+          primarySwatch: Colors.brown,
         ),
-      ])),
-    );
+        home: Home());
+  }
+}
+
+class Home extends StatefulWidget {
+  Home({Key? key}) : super(key: key);
+
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  int numberOfCircles = 2;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Stack(children: [
+      ...List.generate(numberOfCircles, (index) => Performance()),
+      Align(
+        alignment: Alignment.bottomCenter,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ElevatedButton(
+              child: Text("Increase to ${numberOfCircles * 2}"),
+              onPressed: () {
+                setState(() {
+                  numberOfCircles = numberOfCircles * 2;
+                });
+              },
+            ),
+            ElevatedButton(
+              child: Text("Reset"),
+              onPressed: () {
+                setState(() {
+                  numberOfCircles = 2;
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    ]));
   }
 }
 
@@ -50,12 +81,6 @@ class _PerformanceState extends State<Performance>
   @override
   void initState() {
     super.initState();
-    offset = Offset(
-        Random().nextInt(MediaQuery.of(context).size.width.toInt()).toDouble(),
-        Random()
-            .nextInt(MediaQuery.of(context).size.height.toInt())
-            .toDouble()
-            .toDouble());
 
     ticker = Ticker((duration) {
       setState(() {
@@ -64,6 +89,17 @@ class _PerformanceState extends State<Performance>
       });
     });
     ticker.start();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    offset = Offset(
+        Random().nextInt(MediaQuery.of(context).size.width.toInt()).toDouble(),
+        Random()
+            .nextInt(MediaQuery.of(context).size.height.toInt())
+            .toDouble()
+            .toDouble());
   }
 
   Direction getRandomDirection() {
